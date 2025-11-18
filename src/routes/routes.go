@@ -9,6 +9,10 @@ import (
 )
 
 func RegisterRoute(r *gin.Engine, sc godi.IGoDI) {
+	// 健康检查端点（不需要认证）
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "ok"})
+	})
 
 	registerManagementRoutes(r.Group("/api/management"), sc)
 	registerProductionRoutes(r.Group("/api/production"), sc)
