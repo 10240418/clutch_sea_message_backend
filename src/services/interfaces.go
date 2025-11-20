@@ -1,6 +1,7 @@
 package services
 
 import (
+	"mime/multipart"
 	"time"
 
 	"github.com/clutchtechnology/hisense-vmi-dataserver/src/models"
@@ -49,6 +50,7 @@ type IProductionPlanService interface {
 	DeleteProductionPlans(ids []int64) error
 	GetProductionPlansByDateRange(baseDate time.Time) (map[string][]models.ProductionPlan, error)
 	GetActiveProductionPlan(date time.Time, productModelID *uint, allowExceed bool) (*models.ProductionPlan, error)
+	ImportProductionPlan(file multipart.File) ([]models.ProductionPlan, error)
 }
 
 type IProductLineService interface {

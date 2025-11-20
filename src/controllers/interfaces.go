@@ -28,6 +28,7 @@ type IManagementController interface {
 	GetProductionPlan()
 	UpdateProductionPlan()
 	GetProductionPlansByDateRange()
+	ImportProductionPlan()
 
 	GetProductLines()
 	GetProductLine()
