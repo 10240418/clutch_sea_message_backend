@@ -155,14 +155,14 @@ func (pc *ProductionController) AddProduct() {
 	if len(form.SN) >= 7 {
 		snPrefix := form.SN[:7] // 前7位
 		productModel, err := pc.productModelService.GetProductModelBySN(snPrefix)
-		if err == nil {
+		if err == nil && productModel != nil {
 			modelID := uint(productModel.ID)
 			productModelID = &modelID
 
 			// 2. 然后，进行可用生产计划查询
 			today := time.Now()
 			productionPlan, err := pc.productionPlanService.GetActiveProductionPlan(today, productModelID, true)
-			if err == nil {
+			if err == nil && productionPlan != nil {
 				planID := uint(productionPlan.ID)
 				productionPlanID = &planID
 			}
@@ -176,7 +176,7 @@ func (pc *ProductionController) AddProduct() {
 		if form.PalletID != 0 {
 			// 根据托盘ID查询托盘信息获取产线ID
 			pallet, err := pc.palletService.GetPallet(int64(form.PalletID))
-			if err != nil {
+			if err != nil || pallet == nil {
 				pc.ctx.JSON(404, gin.H{"error": "pallet not found"})
 				return
 			}

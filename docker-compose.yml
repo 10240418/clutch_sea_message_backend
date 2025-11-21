@@ -19,6 +19,8 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
       - --default-authentication-plugin=mysql_native_password
+      - --init-connect=SET NAMES utf8mb4
+      - --skip-character-set-client-handshake
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p1090119"]
       interval: 10s
@@ -52,9 +54,6 @@ services:
       HTTP_HOST: 0.0.0.0
       HTTP_PORT: 8080
       
-      # 日志文件路径
-      LOG_FILE: /app/hisense-vmi-server.log
-      
       # JWT 密钥
       SECRET: ${SECRET:-your-secret-key-change-in-production}
       
@@ -64,7 +63,6 @@ services:
       - "${HTTP_PORT:-8080}:8080"
     volumes:
       - ./logs:/app/logs
-      - ./hisense-vmi-server.log:/app/hisense-vmi-server.log
     networks:
       - hisense-vmi-network
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"strings"
 	"time"
@@ -30,19 +29,20 @@ func main() {
 	models.Migrate(DB_CONN)
 	checkAdmin(DB_CONN)
 
-	// Log
-	f, err := os.Create(os.Getenv("LOG_FILE"))
-	if err != nil {
-		fmt.Println("LOG_FILE error", err)
-		return
-	}
-	defer f.Close()
+	// Log - 只输出到控制台，不写入文件
+	// f, err := os.Create(os.Getenv("LOG_FILE"))
+	// if err != nil {
+	// 	fmt.Println("LOG_FILE error", err)
+	// 	return
+	// }
+	// defer f.Close()
 
-	f, err = os.OpenFile(os.Getenv("LOG_FILE"), os.O_WRONLY|os.O_APPEND, os.ModeAppend)
-	if err != nil {
-		fmt.Println("err", err)
-	}
-	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+	// f, err = os.OpenFile(os.Getenv("LOG_FILE"), os.O_WRONLY|os.O_APPEND, os.ModeAppend)
+	// if err != nil {
+	// 	fmt.Println("err", err)
+	// }
+	// gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+	gin.DefaultWriter = os.Stdout // 只输出到控制台
 
 	// Init godi
 	InitGodi()
