@@ -233,6 +233,8 @@ func (mc *ManagementController) DeleteProductionPlan() {
 	mc.ctx.JSON(200, gin.H{"message": "success"})
 }
 
+
+
 func (mc *ManagementController) GetProductionPlans() {
 	var queryParams struct{}
 	var paginateParams models.PaginationQuery
@@ -803,4 +805,27 @@ func (mc *ManagementController) GetCostReport() {
 		"pagination": report.Pagination,
 		"message":    "success",
 	})
+}
+
+func (mc *ManagementController) ImportProductionPlan() {
+	file, err := mc.ctx.FormFile("file")
+	if err != nil {
+		mc.ctx.JSON(400, gin.H{"error": "file is required"})
+		return
+	}
+
+	f, err := file.Open()
+	if err != nil {
+		mc.ctx.JSON(500, gin.H{"error": "failed to open file"})
+		return
+	}
+	defer f.Close()
+
+	plans, err := mc.productionPlanService.ImportProductionPlan(f)
+	if err != nil {
+		mc.ctx.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	mc.ctx.JSON(200, gin.H{"data": plans, "message": "success"})
 }

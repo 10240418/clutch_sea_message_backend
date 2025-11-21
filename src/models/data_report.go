@@ -47,6 +47,7 @@ type InspectionReportItem struct {
 	SupplierName     string `json:"supplierName"`     // 生产厂家
 	InspectionDate   string `json:"inspectionDate"`   // 检测日期(YYYY-MM-DD)
 	Description      string `json:"description"`      // 物料描述
+	ProductLine      string `json:"productLine"`      // 产线信息
 }
 
 type InspectionReportResponse struct {

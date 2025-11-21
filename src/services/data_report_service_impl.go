@@ -114,12 +114,14 @@ func (s *DataReportService) GetInspectionReport(query *models.InspectionReportQu
 			p.batch_number,
 			DATE(p.created_at) as inspection_date,
 			s.name as supplier_name,
+			pl.name as product_line,
 			COUNT(*) as inspection_count,
 			SUM(CASE WHEN p.has_defect = false THEN 1 ELSE 0 END) as qualified_count,
 			SUM(CASE WHEN p.has_defect = true THEN 1 ELSE 0 END) as unqualified_count
 		FROM products p
 		LEFT JOIN product_models pm ON p.product_model_id = pm.id
 		LEFT JOIN suppliers s ON pm.supplier_id = s.id
+		LEFT JOIN product_lines pl ON p.product_line_id = pl.id
 		WHERE 1=1`
 
 	var conditions []string
@@ -158,7 +160,7 @@ func (s *DataReportService) GetInspectionReport(query *models.InspectionReportQu
 	for _, condition := range conditions {
 		baseSQL += " AND " + condition
 	}
-	baseSQL += " GROUP BY pm.sn, pm.description, p.batch_number, DATE(p.created_at), s.name ORDER BY inspection_date DESC, pm.sn, p.batch_number"
+	baseSQL += " GROUP BY pm.sn, pm.description, p.batch_number, DATE(p.created_at), s.name, pl.name ORDER BY inspection_date DESC, pm.sn, p.batch_number"
 
 	// 先查询总数
 	countSQL := fmt.Sprintf("SELECT COUNT(*) FROM (%s) as temp", baseSQL)

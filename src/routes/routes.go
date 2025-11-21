@@ -42,6 +42,7 @@ func registerManagementRoutes(r *gin.RouterGroup, sc godi.IGoDI) {
 		r.GET("/production_plan/:id", func(c *gin.Context) { controllers.NewManagementController(c, sc).GetProductionPlan() })
 		r.PUT("/production_plan", func(c *gin.Context) { controllers.NewManagementController(c, sc).UpdateProductionPlan() })
 		r.GET("/production_plan/date_range", func(c *gin.Context) { controllers.NewManagementController(c, sc).GetProductionPlansByDateRange() })
+		r.POST("/production_plan/import", func(c *gin.Context) { controllers.NewManagementController(c, sc).ImportProductionPlan() })
 
 		r.GET("/product_line", func(c *gin.Context) { controllers.NewManagementController(c, sc).GetProductLines() })
 		r.GET("/product_line/:id", func(c *gin.Context) { controllers.NewManagementController(c, sc).GetProductLine() })
